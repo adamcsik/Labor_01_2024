@@ -1,0 +1,4 @@
+email;jelszo
+mail@mail.com;Jelszo123
+valaki@due.hu;Valami321
+hetedik@het.com;Hetedik7
