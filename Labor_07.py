@@ -110,6 +110,9 @@ class Felhasznalo(Jelszo):
         kapcsolat.commit()
         kapcsolat.close()
 
+    def felhasznalo_keresese(self):
+        # vagy egy jelszó vagy False
+        pass
 
 # főprogram
 dolgozo = Felhasznalo()
