@@ -6,6 +6,7 @@ class Jelszo:
        """
 
     def jelszo_bekerese(self, hossz):
+        jelszo_ok = True
         def jelszo_hossza(_jelszo, _hossz):
             ok = True
             if len(_jelszo) < _hossz:
@@ -36,11 +37,11 @@ class Jelszo:
                     break
             return ok
 
-        jelszo = input("Kérek egy jelszót: ")
-        while not jelszo_hossza(jelszo, hossz) or not szamjegy(jelszo) or not kisbetu(jelszo) or not nagybetu(jelszo):
-            print("Rossz a jelszó!")
-            jelszo = input("Kérek egy jelszót: ")
-        self.felhasznalo_jelszava = jelszo
+        jelszo = self.felhasznalo_jelszava
+        if not jelszo_hossza(jelszo, hossz) or not szamjegy(jelszo) or not kisbetu(jelszo) or not nagybetu(jelszo):
+            jelszo_ok = False
+        return jelszo_ok
+
 
     def jelszo_generalasa(self, hossz=8, kisbetu=True, nagybetu=True, szam=True):
         import string
@@ -112,14 +113,38 @@ class Felhasznalo(Jelszo):
 
     def felhasznalo_keresese(self):
         # vagy egy jelszó vagy False
-        pass
+        felh_ok = False
+        import sqlite3
+        kapcsolat = sqlite3.connect("dolgozok.db")
+        ab = kapcsolat.cursor()
+        nev = self.felhasznalo_neve
+        ab.execute('SELECT * FROM dolgozok WHERE nev= ?', (nev,))
+        rekord = ab.fetchone()
+        if rekord is None:
+            felh_ok = False
+        else:
+            jelszo = rekord[1]
+            if jelszo == self.felhasznalo_jelszava:
+                felh_ok = True
+        kapcsolat.close()
+        return felh_ok
 
-# főprogram
-dolgozo = Felhasznalo()
-print(dolgozo.felhasznalo_neve)
-print(dolgozo.felhasznalo_jelszava)
-dolgozo.felhasznalonev()
-dolgozo.jelszo_generalasa()
-print(dolgozo.felhasznalo_neve)
-print(dolgozo.felhasznalo_jelszava)
-dolgozo.tarolas()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
